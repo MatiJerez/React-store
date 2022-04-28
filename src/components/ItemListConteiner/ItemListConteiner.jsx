@@ -1,37 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import ItemCount from '../ItemCount/ItemCount'
 import Item from '../Item/Item';
-const task = new Promise((res, rej) => {
-    // acciones
-    let condition = true;
-    let obj = [{
-        id: '1', titulo: 'AIR JORDAN RETRO 1 HIGH DARK MOCHA', imagen: './img/8-highdarkmocha.jpg'
-    }]
-    if (condition) {
+
+
+export default function ItemList() {
+
+    const [loader, setLoader] = useState(true)
+    const [products, setProducts] = useState([])
+    const dataProducts = [
+        {
+            id: "1",
+            title: "NIKE DUNK LOW SB CHUNKY DUNKY",
+            stock: 10,
+            description: "low",
+            price: 2000,
+            pictureUrl: "#"
+        },
+        {
+            id: "2",
+            title: "NIKE AIR FORCE 1 LOW JUST DO IT ORANGE",
+            stock: 4,
+            description: "low",
+            price: 4000,
+            pictureUrl: "#"
+        },
+        {
+            id: "3",
+            title: "NIKE AIR MAX 90 INDEPENDENCE DAY WHITE",
+            stock: 2,
+            description: "air max",
+            price: 5000,
+            pictureUrl: "#"
+        }
+    ];
+
+    const getProducts = new Promise((response, reject) => {
         setTimeout(() => {
-            res(obj)
-        }, 2000)
+            response(dataProducts);
+        }, 2000);
+    });
 
-    } else {
-        rej('ERROR')
-    }
-});
-
-
-export default function ItemListConteiner({ category }) {
-    task
-        .then(res => {
-            // throw new Error('esto es un error ')
-            // return resp;
-            console.log(res);
+    useEffect(() => {
+        getProducts.then((data) => {
+            console.log("respuesta de promesa:", data)
+            setProducts(data)
+            //Ocultar loader
+            setLoader(false)
         })
-        .catch(err => console.log(err))
-        .then(respuesta => console.log(respuesta))
-        .finally(() => console.log('si o si al final'))
+    }, [])
+
+
+
     return (
-        <div>
-            <h2>{category}</h2>
-            < Item />
+
+        <div fluid className="justify-content-center">
+            {
+                loader
+                    ?
+                    <p> loading... </p>
+                    :
+                    <div >
+                        {products.map(product => {
+                            return (
+                                <div key={product.id}>
+                                    <Item data={product} />
+                                </div>
+                            )
+                        })}
+                    </div>
+            }
         </div>
     )
 }
