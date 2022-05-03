@@ -24,7 +24,7 @@ export default function Item({ data }) {
         <div className="product">
             <p>{data.title}</p>
             <img width="100px" src={"."} alt="product" />
-            <ItemCount stock={data.stock} />
+            <ItemCount initial={0} stock={data.stock} />
         </div>
     )
 };
